@@ -48,6 +48,10 @@
   height:120px;
 }
 
+.completed {
+  background-color: pink;
+}
+
 /*.selected{*/
   /*background-color: blueviolet;*/
 /*}*/
