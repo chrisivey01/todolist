@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React, { Component } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
 
@@ -14,8 +15,8 @@ class App extends Component {
         };
     }
 
+    //look at render method, on click adds className "completed"
     markCompleted = (index) => {
-        // This is so dumb. I can't modify arrays directly in the state? Screw you react.
         this.setState((prevState, props) => {
             let completed = prevState.completed;
             completed[index] = !completed[index];
@@ -25,26 +26,31 @@ class App extends Component {
         });
     }
 
+    // with " ... " spread operator it merges 2 arrays, items and completed. At first you're setting their array
+    //indexes to false, this is how you give them a "selector" like JQUERY but with indexes.
     addItem = () => {
         this.setState((prevState, props) => {
             return {
                 items: [...prevState.items, this.state.tempInput],
-                completed: [...prevState.completed, false]
+                completed: [...prevState.completed, false],
+                tempInput: ''
             };
         });
     }
 
+    //deleted is the completed array with boolean values - trueChecker is setup to match only true values
+    //here you need to remove from both arrays and splice through
     deleteItem = () => {
         this.setState((prevState) =>{
 
-            let deleted = prevState.completed;
+            let deleted = this.state.completed;
             let trueChecker = deleted.indexOf(true);
 
             for(var i = 0; i<=deleted.length; i++){
                 if(deleted[i] == true){
                     deleted.splice(trueChecker,1)
                     prevState.items.splice(i,1);
-                    i=0;
+                    i=-1;
                 }
             }
                 // prevState.items = prevState.deleted
@@ -63,12 +69,9 @@ class App extends Component {
                 <header className="App-header">
                     <h1 className="App-title">TODO List</h1>
                 </header>
-                <p className="App-intro">
-                    To get started, add an item using the form. Click on an item to toggle it as completed (Green)
-                </p>
                 <input value={this.state.tempInput} onChange={this.handleChange} /><button onClick={this.addItem}>Add Item</button>
 
-                <ul>
+                <ul className="list-group">
                     {this.state.items.map((item, index) =>
                         <li key={index} onClick={() => this.markCompleted(index)} className={classNames({completed: this.state.completed[index]})}>{item}</li>
                     )}
