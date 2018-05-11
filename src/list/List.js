@@ -9,7 +9,8 @@ class App extends Component {
         this.state = {
             items: [ ],
             tempInput:'',
-            completed: [ ]
+            completed: [ ],
+            deleted:[ ]
         };
     }
 
@@ -33,6 +34,25 @@ class App extends Component {
         });
     }
 
+    deleteItem = () => {
+        this.setState((prevState) =>{
+
+            let deleted = prevState.completed;
+            let trueChecker = deleted.indexOf(true);
+
+            for(var i = 0; i<=deleted.length; i++){
+                if(deleted[i] == true){
+                    deleted.splice(trueChecker,1)
+                    prevState.items.splice(i,1);
+                    i=0;
+                }
+            }
+                // prevState.items = prevState.deleted
+            return {
+                items:prevState.items
+            }
+        })
+    }
     handleChange = (event) => {
         this.setState({tempInput: event.target.value});
     }
@@ -53,6 +73,7 @@ class App extends Component {
                         <li key={index} onClick={() => this.markCompleted(index)} className={classNames({completed: this.state.completed[index]})}>{item}</li>
                     )}
                 </ul>
+                <button onClick={this.deleteItem}>Delete Item</button>
             </div>
         );
     }
